@@ -16,7 +16,7 @@ fi
 
 echo "DB_NAME=$conf_app_env_db_name" >> $APP_PATH/.env
 echo "DB_USER=$conf_app_env_db_user" >> $APP_PATH/.env
-echo "DB_PASS=$conf_app_env_db_pass" >> $APP_PATH/.env
+echo "DB_PASSWORD=$conf_app_env_db_pass" >> $APP_PATH/.env
 
 echo "" >> $APP_PATH/.env
 
