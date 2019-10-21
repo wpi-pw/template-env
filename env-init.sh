@@ -39,7 +39,7 @@ echo "DB_PREFIX=$(wpi_key "db_prefix")" >> $app_path/.env
 echo "" >> $app_path/.env
 
 echo "WP_ENV=$cur_env" >> $app_path/.env
-echo "WP_HOME=$(wpi_key "app_protocol")//$(wpi_key "app_host")" >> $app_path/.env
+echo "WP_HOME=$(wpi_key "app_protocol")://$(wpi_key "app_host")" >> $app_path/.env
 echo "WP_SITEURL=\${WP_HOME}/wp" >> $app_path/.env
 
 echo "" >> $app_path/.env
