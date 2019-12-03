@@ -96,3 +96,12 @@ echo "" >> $app_path/.env
 
 # AdvancedCustomFields Pro - license config
 echo "ACF_PRO_UPDATE_LICENSE=$(wpi_yq extra.acf_pro_update_license)" >> $app_path/.env
+
+echo "" >> $app_path/.env
+
+mapfile -t env_keys < <( wpi_yq "env.$cur_env.custom" 'keys' )
+# Get all custom configs and add to env
+for i in "${!env_keys[@]}"
+do
+  echo "${env_keys[$i]}=$(wpi_yq "env.$cur_env.custom.${env_keys[$i]}")" >> $app_path/.env
+done
