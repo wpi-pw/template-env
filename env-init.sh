@@ -14,13 +14,13 @@ done
 # Get wpi-source for yml parsing, noroot, errors etc
 source <(curl -s https://raw.githubusercontent.com/wpi-pw/template-workflow/master/wpi-source.sh)
 
-cur_env=$1
+cur_env=$(cur_env)
 cur_wpi="wpi_env_${cur_env}_"
 app_path=${PWD}
 
-printf "${GRN}=====================================${NC}\n"
-printf "${GRN}.env init for "$(wpi_key "app_host")"${NC}\n"
-printf "${GRN}=====================================${NC}\n"
+printf "${GRN}======================================${NC}\n"
+printf "${GRN} .env init for "$(wpi_key "app_host")"${NC}\n"
+printf "${GRN}======================================${NC}\n"
 
 if [ -f "${PWD}/.env" ]; then
   mv $app_path/.env $app_path/.env.old
@@ -104,4 +104,32 @@ mapfile -t env_keys < <( wpi_yq "env.$cur_env.custom" 'keys' )
 for i in "${!env_keys[@]}"
 do
   echo "${env_keys[$i]}=$(wpi_yq "env.$cur_env.custom.${env_keys[$i]}")" >> $app_path/.env
+done
+
+printf "${GRN}======================================${NC}\n"
+printf "${GRN} Config alias's in the wp-cli.yml     ${NC}\n"
+printf "${GRN}======================================${NC}\n"
+# Clean wp-cli.yml before insert alias's
+> $app_path/wp-cli.yml
+# Restore basic setup for bedrock
+echo "path: web/wp" >> $app_path/wp-cli.yml
+echo "server:" >> $app_path/wp-cli.yml
+echo "  docroot: web" >> $app_path/wp-cli.yml
+# Get top keys from env config, local excluded
+mapfile -t env_alias < <(wpi_yq "env" "top_keys")
+# Make wp cli alias in wp-cli.yml from for env config
+for i in "${!env_alias[@]}"
+do
+  # default vars for user, ip, dir
+  a_user=$(wpi_yq "env.${env_alias[$i]}.app_user")
+  a_ip=$(wpi_yq "env.${env_alias[$i]}.app_ip")
+  a_dir=$(wpi_yq "env.${env_alias[$i]}.app_dir")
+  # check the vars and if not local
+  if [[ $a_user && $a_ip && $a_dir ]] && [[ ${env_alias[$i]} != "local" ]]; then
+    echo >> $app_path/wp-cli.yml
+    # set alias via env
+    echo "@${env_alias[$i]}:" >> $app_path/wp-cli.yml
+    # add ssh config for current alias
+    echo "  ssh: $a_user@$a_ip:$a_dir" >> $app_path/wp-cli.yml
+  fi
 done
