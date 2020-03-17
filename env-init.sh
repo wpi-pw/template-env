@@ -125,7 +125,7 @@ do
   a_ip=$(wpi_yq "env.${env_alias[$i]}.app_ip")
   a_dir=$(wpi_yq "env.${env_alias[$i]}.app_dir")
   # check the vars and if not local
-  if [[ $a_user && $a_ip && $a_dir ]] && [[ ${env_alias[$i]} != "local" ]]; then
+  if [[ $a_user && $a_ip && $a_dir ]]; then
     echo >> $app_path/wp-cli.yml
     # set alias via env
     echo "@${env_alias[$i]}:" >> $app_path/wp-cli.yml
