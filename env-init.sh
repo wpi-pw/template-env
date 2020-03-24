@@ -130,6 +130,6 @@ do
     # set alias via env
     echo "@${env_alias[$i]}:" >> $app_path/wp-cli.yml
     # add ssh config for current alias
-    echo "  ssh: $a_user@$a_ip:$a_dir" >> $app_path/wp-cli.yml
+    echo "  ssh: $a_user@$a_ip:${a_dir%/}" >> $app_path/wp-cli.yml
   fi
 done
