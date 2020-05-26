@@ -107,7 +107,7 @@ do
 done
 
 printf "${GRN}======================================${NC}\n"
-printf "${GRN} Config alias's in the wp-cli.yml     ${NC}\n"
+printf "${GRN} Config aliases in the wp-cli.yml     ${NC}\n"
 printf "${GRN}======================================${NC}\n"
 # Clean wp-cli.yml before insert alias's
 > $app_path/wp-cli.yml
